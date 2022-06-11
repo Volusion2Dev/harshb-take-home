@@ -7,7 +7,7 @@ import * as api from './api';
 
 import UnstyledBlockPicker from "../components/block-picker";
 import UnstyledSite from "../components/site";
-import { Block, BlockType } from "../types";
+import { Block } from "../types";
 
 const AppContainer = styled.section`
   display: flex;
@@ -27,7 +27,7 @@ const Site = styled(UnstyledSite)`
 const defaultBlocks: Block[] = [
   {
     id: 1,
-    type: "header",
+    type: 'header',
     position: 0,
     configData: {
       title: 'Default Title'
@@ -35,7 +35,7 @@ const defaultBlocks: Block[] = [
   },
   {
     id: 2,
-    type: "hero",
+    type: 'hero',
     position: 1,
     configData: {
       title: 'Default Title',
@@ -44,7 +44,7 @@ const defaultBlocks: Block[] = [
   },
   {
     id: 3,
-    type: "footer",
+    type: 'footer',
     position: 2,
     configData: null
   }
@@ -52,6 +52,7 @@ const defaultBlocks: Block[] = [
 
 export default function Home(): JSX.Element {
   const [blockList, setBlockList] = useState(defaultBlocks);
+  const [allBlocks, setAllBlocks] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const toasterRef = useRef(null);
 
@@ -59,7 +60,9 @@ export default function Home(): JSX.Element {
     async function getBlocks() {
       try {
         const blocks: Block[] = await api.getBlocks();
-        setBlockList(blocks);
+        console.log('blocks: ', blocks);
+        setAllBlocks(blocks);
+        setBlockList(defaultBlocks);
       } catch (err) {
         toasterRef.current.show({
           message: err.message,
@@ -71,7 +74,7 @@ export default function Home(): JSX.Element {
   }, []);
 
   // TODO: call api to save block
-  const addBlock = (blockName: BlockType) => {
+  const addBlock = (blockName: string) => {
     if (activeIndex === -1) {
       toasterRef.current.show({
         message:
@@ -111,7 +114,7 @@ export default function Home(): JSX.Element {
 
       <AppContainer>
         <Toaster ref={toasterRef} />
-        <BlockPicker addBlock={addBlock} />
+        <BlockPicker addBlock={addBlock} blocks={ allBlocks } />
         <Site
           activeIndex={activeIndex}
           blockList={blockList}
