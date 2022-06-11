@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import next from 'next';
 
 import { getBlocks }  from './api/blocks';
+import { getBlockById }  from './api/blocks';
 import { ApiResponse } from "./apiResponse";
 
 const port = parseInt(process.env.PORT || '3000');
@@ -17,6 +18,17 @@ app.prepare().then(() => {
   server.get('/blocks', async (_req: Request, res: Response) => {
     const blockResponse: ApiResponse = await getBlocks();
     res.status(blockResponse.statusCode).json(blockResponse.data);
+  });
+
+  server.get('/blocks/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      const blockResponse: ApiResponse = await getBlockById(id);
+      res.status(blockResponse.statusCode).json(blockResponse.data);
+    } catch (error) {
+      console.log(error.message);
+    }
   });
 
   server.all('*', (req, res) => {

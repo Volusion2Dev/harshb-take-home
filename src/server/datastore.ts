@@ -21,10 +21,23 @@ export async function getBlocks(): Promise<Block[]> {
     ORDER BY
       position;`
   );
+
   return result.map((row: any) => ({
     id: row.id,
     type: row.block_type,
     position: row.position,
     configData: JSON.parse(row.data)
   }));
+}
+
+export async function getBlockById(id): Promise<Block> {
+  const result = await db.one(
+    `SELECT
+    *
+    FROM
+    site_builder.block
+    WHERE
+    id = $1`, [id]);
+
+    return result;
 }
