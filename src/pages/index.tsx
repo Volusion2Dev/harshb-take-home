@@ -8,6 +8,7 @@ import * as api from './api';
 import UnstyledBlockPicker from "../components/block-picker";
 import UnstyledSite from "../components/site";
 import { Block } from "../types";
+import { Button } from "@blueprintjs/core";
 
 const AppContainer = styled.section`
   display: flex;
@@ -22,6 +23,19 @@ const BlockPicker = styled(UnstyledBlockPicker)`
 const Site = styled(UnstyledSite)`
   flex: 1;
   z-index: 1;
+`;
+
+const Preview = styled(Button)`
+    background-color: #9fb3c8 !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #102a43 !important;
+    font-weight: bold;
+    margin: 5px auto;
+    padding: 10px;
+    text-transform: capitalize;
+    width: 5%;
+    height: 5%;
 `;
 
 const defaultBlocks: Block[] = [
@@ -54,6 +68,7 @@ export default function Home(): JSX.Element {
   const [blockList, setBlockList] = useState(defaultBlocks);
   const [allBlocks, setAllBlocks] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [showPicker, setShowPicker] = useState(true);
   const toasterRef = useRef(null);
 
   useEffect(() => {
@@ -105,6 +120,10 @@ export default function Home(): JSX.Element {
     }
   };
 
+  const onPreviewClick = () => {
+    setShowPicker(!showPicker);
+  }
+
   return (
     <div>
       <Head>
@@ -114,13 +133,16 @@ export default function Home(): JSX.Element {
 
       <AppContainer>
         <Toaster ref={toasterRef} />
-        <BlockPicker addBlock={addBlock} blocks={ allBlocks } />
+        { showPicker ?  <BlockPicker addBlock={addBlock} blocks={ allBlocks } /> : null }
         <Site
           activeIndex={activeIndex}
           blockList={blockList}
           removeBlock={removeBlock}
           setActiveIndex={setActiveIndex}
         />
+        <Preview onClick={onPreviewClick}>
+          { showPicker ? 'Preview Changes' : 'Edit Changes' }
+        </Preview>
       </AppContainer>
     </div>
   );
