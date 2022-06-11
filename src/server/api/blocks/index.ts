@@ -19,3 +19,12 @@ export async function getBlockById(id): Promise<ApiResponse> {
     return { statusCode: 500, data: { message: error.message }};
   }
 }
+
+export async function CreateBlock(block: Block): Promise<ApiResponse> {
+  try {
+    const blockData: Block = await db.createBlock(block);
+    return { statusCode: 200, data: blockData };
+  } catch (error) {
+    return { statusCode: 500, data: { message: error.message }};
+  }
+}

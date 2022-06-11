@@ -2,9 +2,10 @@ import * as bodyParser from "body-parser";
 import express, { Request, Response } from "express";
 import next from 'next';
 
-import { getBlocks }  from './api/blocks';
+import { getBlocks, CreateBlock }  from './api/blocks';
 import { getBlockById }  from './api/blocks';
 import { ApiResponse } from "./apiResponse";
+import { Block } from "../types";
 
 const port = parseInt(process.env.PORT || '3000');
 const dev = process.env.NODE_ENV !== 'production';
@@ -29,6 +30,22 @@ app.prepare().then(() => {
     } catch (error) {
       console.log(error.message);
     }
+  });
+
+  server.post('/blocks', async (req, res) => {
+    console.log('request body: ', req.body);
+    console.log('request body configs = ', req.body.configured_data);
+
+    const block: Block = {
+      type: req.body.block_type,
+      configData:  JSON.stringify(req.body.configured_data),
+      position:  req.body.position
+    };
+
+    console.log('block is: ', block);
+
+    const blockResponse: ApiResponse = await CreateBlock(block);
+    res.status(blockResponse.statusCode).json(blockResponse.data);
   });
 
   server.all('*', (req, res) => {

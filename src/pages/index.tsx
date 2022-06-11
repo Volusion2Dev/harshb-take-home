@@ -7,7 +7,7 @@ import * as api from './api';
 
 import UnstyledBlockPicker from "../components/block-picker";
 import UnstyledSite from "../components/site";
-import { Block, BlockType } from "../types";
+import { Block } from "../types";
 
 const AppContainer = styled.section`
   display: flex;
@@ -71,7 +71,7 @@ export default function Home(): JSX.Element {
   }, []);
 
   // TODO: call api to save block
-  const addBlock = (blockName: BlockType) => {
+  const addBlock = (blockName: string) => {
     if (activeIndex === -1) {
       toasterRef.current.show({
         message:
