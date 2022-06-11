@@ -60,33 +60,57 @@ interface HeroProps {
   data: {
     title?: string;
     subtitle?: string;
-  }
+  },
+  editMode: boolean
 }
 
-const Hero: React.FunctionComponent<HeroProps> = ({ data }): JSX.Element => {
+const Hero: React.FunctionComponent<HeroProps> = ({ data, editMode }): JSX.Element => {
   const [title, setTitle] = useState(data?.title || "Title");
   const [subtitle, setSubtitle] = useState(data?.subtitle || "Subtitle");
+  const [edit, setEdit] = useState(editMode);
+
+  useEffect(() => {
+    setEdit(editMode)
+  });
 
   useEffect(() => {
     setTitle(data?.title)
     setSubtitle(data?.subtitle)
   }, [data]);
 
-  return (
-    <Container data-testid="hero">
-      <Overlay>
-        <Title
-          value={title}
-          onChange={(e) => setTitle(e.currentTarget.value)}
-        />
-        <SubTitle
-          value={subtitle}
-          onChange={(e) => setSubtitle(e.currentTarget.value)}
-        />
-        <StyledButton> Order Now! </StyledButton>
-      </Overlay>
-    </Container>
-  );
+  if (edit) {
+    return (
+      <Container data-testid="hero">
+        <Overlay>
+          <Title
+            value={title}
+            onChange={(e) => setTitle(e.currentTarget.value)}
+          />
+          <SubTitle
+            value={subtitle}
+            onChange={(e) => setSubtitle(e.currentTarget.value)}
+          />
+          <StyledButton> Order Now! </StyledButton>
+        </Overlay>
+      </Container>
+    );
+  } else {
+    return (
+      <Container data-testid="hero">
+        <Overlay>
+          <Title
+            value={title}
+            disabled={true}
+          />
+          <SubTitle
+            value={subtitle}
+            disabled={true}
+          />
+          <StyledButton> Order Now! </StyledButton>
+        </Overlay>
+      </Container>
+    );
+  }
 }
 
 export default Hero;

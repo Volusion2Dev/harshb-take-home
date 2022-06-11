@@ -21,25 +21,41 @@ const Name = styled.input`
 
 interface HeaderProps {
   data?: { title: string};
+  editMode: boolean
 }
 
-const Header: React.FunctionComponent<HeaderProps> = ({ data }): JSX.Element => {
+const Header: React.FunctionComponent<HeaderProps> = ({ data, editMode }): JSX.Element => {
   const [title, setTitle] = useState(data?.title || 'store name');
+  const [edit, setEdit] = useState(editMode);
   useEffect(() => {
     document.title = title;
   });
 
   useEffect(() => {
+    setEdit(editMode)
+  });
+
+  useEffect(() => {
     setTitle(data?.title);
   }, [data]);
-  return (
-    <Container data-testid="header">
-      <Name
-        placeholder="Store Name" defaultValue={title}
-        onChange={(e) => setTitle(e.currentTarget.value)}/>
-      <Icon icon="shopping-cart" intent="success" iconSize={28} />
-    </Container>
-  );
+  if (edit){
+    return (
+      <Container data-testid="header">
+          <Name
+          placeholder="Store Name" defaultValue={title}
+          onChange={(e) => setTitle(e.currentTarget.value)}/>
+        <Icon icon="shopping-cart" intent="success" iconSize={28} />
+      </Container>
+    )
+  } else {
+    return (
+      <Container data-testid="header">
+          <Name
+          placeholder="Store Name" defaultValue={title}
+          disabled={true}/>
+      </Container>
+      )
+  }
 };
 
 export default Header;

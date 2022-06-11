@@ -60,20 +60,6 @@ const Modal: React.FunctionComponent<ModalProps> = ({ setIsOpen }) => {
             />
 
             <button type="submit" className={styles.submitBtn}>Submit</button>
-
-          {/* <div className={styles.modalActions}>
-            <div className={styles.actionsContainer}>
-              <button className={styles.createBtn} type="submit" onClick={() => setIsOpen(false)}>
-                Create
-              </button>
-              <button
-                className={styles.cancelBtn}
-                onClick={() => setIsOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div> */}
           </form>
           
         </div>

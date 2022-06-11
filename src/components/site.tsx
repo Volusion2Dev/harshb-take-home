@@ -34,6 +34,22 @@ const BlockContainer = styled.div`
   }
 `;
 
+const BlockContainerView = styled.div`
+  margin: 0;
+  transition: margin 0.2s ease;
+
+  button {
+    opacity: 0;
+  }
+
+  &:hover,
+  &:focus {
+    button {
+      opacity: 1;
+    }
+  }
+`;
+
 const Spacer = styled.div`
   align-items: center;
   color: #334e68;
@@ -85,6 +101,7 @@ interface SiteProps {
   className?: string;
   removeBlock: (index: number) => void;
   setActiveIndex: (index: number) => void;
+  editMode: boolean
 }
 
 const site: React.FunctionComponent<SiteProps> = ({
@@ -93,42 +110,58 @@ const site: React.FunctionComponent<SiteProps> = ({
   className,
   removeBlock,
   setActiveIndex,
+  editMode
 }) => {
-  return (
-    <Container className={className}>
-      {blockList.map((block: Block, index: number) => {
-        const Component = blocks[block.type];
-        return (
-          <BlockContainer data-testid="block-container" key={index}>
-            {index === activeIndex ? (
-              <Spacer data-testid="spacer">
-                <div>(Insert Blocks from the Side Panel Here)</div>
-                <CloseSpacer onClick={() => setActiveIndex(-1)}>x</CloseSpacer>
-              </Spacer>
-            ) : (
-              <AddButton onClick={() => setActiveIndex(index)}> + </AddButton>
-            )}
-            <TrashButton
-              data-testid="remove-button"
-              onClick={() => removeBlock(index)}
-            >
-              <Icon icon="trash" intent="danger" iconSize={15} />
-            </TrashButton>
-            <Component data={block.configData} />
-            {index + 1 !== activeIndex && (
-              <AddButton onClick={() => setActiveIndex(index + 1)}>+</AddButton>
-            )}
-          </BlockContainer>
-        );
-      })}
-      {activeIndex === blockList.length && (
-        <Spacer data-testid="spacer">
-          <div>(Insert Blocks from the Side Panel Here)</div>
-          <CloseSpacer onClick={() => setActiveIndex(-1)}>x</CloseSpacer>
-        </Spacer>
-      )}
-    </Container>
-  );
+  if (editMode) {
+    return (
+      <Container className={className}>
+        {blockList.map((block: Block, index: number) => {
+          const Component = blocks[block.type];
+          return (
+            <BlockContainer data-testid="block-container" key={index}>
+              {index === activeIndex ? (
+                <Spacer data-testid="spacer">
+                  <div>(Insert Blocks from the Side Panel Here)</div>
+                  <CloseSpacer onClick={() => setActiveIndex(-1)}>x</CloseSpacer>
+                </Spacer>
+              ) : (
+                <AddButton onClick={() => setActiveIndex(index)}> + </AddButton>
+              )}
+              { editMode ? <TrashButton
+                data-testid="remove-button"
+                onClick={() => removeBlock(index)}
+              >
+                <Icon icon="trash" intent="danger" iconSize={15} />
+              </TrashButton> : null }
+              <Component editMode={editMode} data={block.configData} />
+              {index + 1 !== activeIndex && (
+                <AddButton onClick={() => setActiveIndex(index + 1)}>+</AddButton>
+              )}
+            </BlockContainer>
+          );
+        })}
+        {activeIndex === blockList.length && (
+          <Spacer data-testid="spacer">
+            <div>(Insert Blocks from the Side Panel Here)</div>
+            <CloseSpacer onClick={() => setActiveIndex(-1)}>x</CloseSpacer>
+          </Spacer>
+        )}
+      </Container>
+    );
+  } else {
+    return (
+      <Container className={className}>
+        {blockList.map((block: Block, index: number) => {
+          const Component = blocks[block.type];
+          return (
+            <BlockContainerView data-testid="block-container" key={index}>
+              <Component editMode={editMode} data={block.configData} />
+            </BlockContainerView>
+          );
+        })}
+      </Container>
+    );
+  }
 };
 
 export default site;
