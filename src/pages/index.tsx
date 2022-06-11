@@ -75,7 +75,6 @@ export default function Home(): JSX.Element {
     async function getBlocks() {
       try {
         const blocks: Block[] = await api.getBlocks();
-        console.log('blocks: ', blocks);
         setAllBlocks(blocks);
         setBlockList(defaultBlocks);
       } catch (err) {
@@ -139,6 +138,7 @@ export default function Home(): JSX.Element {
           blockList={blockList}
           removeBlock={removeBlock}
           setActiveIndex={setActiveIndex}
+          editMode = {showPicker}
         />
         <Preview onClick={onPreviewClick}>
           { showPicker ? 'Preview Changes' : 'Edit Changes' }
