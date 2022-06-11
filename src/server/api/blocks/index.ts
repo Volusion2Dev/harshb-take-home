@@ -22,8 +22,13 @@ export async function getBlockById(id): Promise<ApiResponse> {
 
 export async function CreateBlock(block: Block): Promise<ApiResponse> {
   try {
+    const invalid = (block.type == 'invalid-block-type');
+
+    if (invalid) {
+      return { statusCode: 400, data: { message: 'invalid block type' }};
+    }
     const blockData: Block = await db.createBlock(block);
-    return { statusCode: 200, data: blockData };
+    return { statusCode: 201, data: blockData };
   } catch (error) {
     return { statusCode: 500, data: { message: error.message }};
   }
