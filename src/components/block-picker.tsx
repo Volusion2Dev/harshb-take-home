@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Button } from "@blueprintjs/core";
 
-import blocks from "../components/blocks";
+import { Block } from "../types";
 
 const Container = styled.div`
   webkit-box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1),
@@ -47,9 +47,11 @@ const StyledButton = styled(Button)`
 interface BlockPickerProps {
   addBlock: (blockName: string) => void;
   className?: string;
+  blocks: Block[]
 }
 
-const BlockPicker: React.FunctionComponent<BlockPickerProps> = ({ addBlock, className }) => {
+const BlockPicker: React.FunctionComponent<BlockPickerProps> = ({ addBlock, className, blocks }) => {
+  
   return (
     <Container className={className}>
       <HeaderSection>
@@ -58,11 +60,11 @@ const BlockPicker: React.FunctionComponent<BlockPickerProps> = ({ addBlock, clas
       <BlockSection>
         {Object.keys(blocks).map((blockName: string, index: number) => (
           <StyledButton
-            data-testid={`block-add-${blockName}`}
-            key={index}
-            onClick={() => addBlock(blockName)}
+            data-testid={`block-add-${blocks[index].type}`}
+            key={blockName}
+            onClick={() => addBlock(blocks[index].type)}
           >
-            {blockName}
+            {blocks[index].type}
           </StyledButton>
         ))}
       </BlockSection>

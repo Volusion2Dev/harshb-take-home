@@ -51,7 +51,8 @@ const defaultBlocks: Block[] = [
 ];
 
 export default function Home(): JSX.Element {
-  const [blockList, setBlockList] = useState([]);
+  const [blockList, setBlockList] = useState(defaultBlocks);
+  const [allBlocks, setAllBlocks] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const toasterRef = useRef(null);
 
@@ -60,7 +61,8 @@ export default function Home(): JSX.Element {
       try {
         const blocks: Block[] = await api.getBlocks();
         console.log('blocks: ', blocks);
-        setBlockList(blocks);
+        setAllBlocks(blocks);
+        setBlockList(defaultBlocks);
       } catch (err) {
         toasterRef.current.show({
           message: err.message,
@@ -112,7 +114,7 @@ export default function Home(): JSX.Element {
 
       <AppContainer>
         <Toaster ref={toasterRef} />
-        <BlockPicker addBlock={addBlock} />
+        <BlockPicker addBlock={addBlock} blocks={ allBlocks } />
         <Site
           activeIndex={activeIndex}
           blockList={blockList}
