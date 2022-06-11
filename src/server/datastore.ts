@@ -43,7 +43,6 @@ export async function getBlockById(id): Promise<Block> {
 }
 
 export async function createBlock(block: Block): Promise<Block> {
-  console.log('block in query: ', block);
   const result = await db.one(
     `INSERT INTO
     site_builder.block(block_type, position, configured_data)
@@ -53,4 +52,17 @@ export async function createBlock(block: Block): Promise<Block> {
   );
 
   return result;
+}
+
+export async function deleteBlock(id): Promise<null> {
+  await db.none(
+    `DELETE
+    FROM
+    site_builder.block
+    WHERE
+    id = $1`,
+    [id]
+  );
+
+  return;
 }

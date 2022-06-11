@@ -2,7 +2,7 @@ import * as bodyParser from "body-parser";
 import express, { Request, Response } from "express";
 import next from 'next';
 
-import { getBlocks, CreateBlock }  from './api/blocks';
+import { getBlocks, CreateBlock, deleteBlock }  from './api/blocks';
 import { getBlockById }  from './api/blocks';
 import { ApiResponse } from "./apiResponse";
 import { Block } from "../types";
@@ -33,19 +33,22 @@ app.prepare().then(() => {
   });
 
   server.post('/blocks', async (req, res) => {
-    console.log('request body: ', req.body);
-    console.log('request body configs = ', req.body.configured_data);
-
     const block: Block = {
       type: req.body.block_type,
       configData:  JSON.stringify(req.body.configured_data),
       position:  req.body.position
     };
 
-    console.log('block is: ', block);
-
     const blockResponse: ApiResponse = await CreateBlock(block);
     res.status(blockResponse.statusCode).json(blockResponse.data);
+  });
+
+  server.delete('/blocks/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const blockResponse: ApiResponse = await deleteBlock(id);
+
+    res.status(blockResponse.statusCode);
   });
 
   server.all('*', (req, res) => {

@@ -27,7 +27,7 @@ const Site = styled(UnstyledSite)`
 const defaultBlocks: Block[] = [
   {
     id: 1,
-    type: "header",
+    type: 'header',
     position: 0,
     configData: {
       title: 'Default Title'
@@ -35,7 +35,7 @@ const defaultBlocks: Block[] = [
   },
   {
     id: 2,
-    type: "hero",
+    type: 'hero',
     position: 1,
     configData: {
       title: 'Default Title',
@@ -44,14 +44,14 @@ const defaultBlocks: Block[] = [
   },
   {
     id: 3,
-    type: "footer",
+    type: 'footer',
     position: 2,
     configData: null
   }
 ];
 
 export default function Home(): JSX.Element {
-  const [blockList, setBlockList] = useState(defaultBlocks);
+  const [blockList, setBlockList] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const toasterRef = useRef(null);
 
@@ -59,6 +59,7 @@ export default function Home(): JSX.Element {
     async function getBlocks() {
       try {
         const blocks: Block[] = await api.getBlocks();
+        console.log('blocks: ', blocks);
         setBlockList(blocks);
       } catch (err) {
         toasterRef.current.show({

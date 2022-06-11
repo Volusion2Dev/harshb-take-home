@@ -28,3 +28,12 @@ export async function CreateBlock(block: Block): Promise<ApiResponse> {
     return { statusCode: 500, data: { message: error.message }};
   }
 }
+
+export async function deleteBlock(id): Promise<ApiResponse> {
+  try {
+    await db.deleteBlock(id);
+    return { statusCode: 200, data: null };
+  } catch (error) {
+    return { statusCode: 500, data: { message: error.message }};
+  }
+}
