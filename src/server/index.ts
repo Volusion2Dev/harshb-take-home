@@ -34,10 +34,15 @@ app.prepare().then(() => {
 
   server.post('/blocks', async (req, res) => {
     const block: Block = {
-      type: req.body.block_type,
+      type: req.body.type,
       configData:  JSON.stringify(req.body.configured_data),
       position:  req.body.position
     };
+
+    if (!block.configData)
+    {
+      block.configData = null;
+    }
 
     const blockResponse: ApiResponse = await CreateBlock(block);
     res.status(blockResponse.statusCode).json(blockResponse.data);

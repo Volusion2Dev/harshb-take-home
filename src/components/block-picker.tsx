@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Fragment, useState } from "react";
 import styled from "styled-components";
 import { Button } from "@blueprintjs/core";
 
 import { Block } from "../types";
+import Modal from "./Modal";
 
 const Container = styled.div`
   webkit-box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1),
@@ -44,6 +45,25 @@ const StyledButton = styled(Button)`
   width: 80%;
 `;
 
+const CreateStyledButton = styled(Button)`
+  background-color: #b39afd !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #102a43 !important;
+  font-weight: bold;
+  margin: 5px auto;
+  padding: 10px;
+  text-transform: capitalize;
+  width: 80%;
+`;
+
+const CreateBlockSection = styled.div`
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`
+
 interface BlockPickerProps {
   addBlock: (blockName: string) => void;
   className?: string;
@@ -51,11 +71,23 @@ interface BlockPickerProps {
 }
 
 const BlockPicker: React.FunctionComponent<BlockPickerProps> = ({ addBlock, className, blocks }) => {
+
+  const createBlock = async e => {
+    e.preventDefault();
+    try {
+        
+    } catch (error) {
+        console.error(error.message);
+    }
+  }
+
+  const [isOpen, setIsOpen] = useState(false);
   
   return (
     <Container className={className}>
       <HeaderSection>
         <HeaderText> Add a Block </HeaderText>
+        
       </HeaderSection>
       <BlockSection>
         {Object.keys(blocks).map((blockName: string, index: number) => (
@@ -67,6 +99,12 @@ const BlockPicker: React.FunctionComponent<BlockPickerProps> = ({ addBlock, clas
             {blocks[index].type}
           </StyledButton>
         ))}
+        <CreateBlockSection>
+          <CreateStyledButton onClick={() => setIsOpen(true)}>
+            Create New Block
+          </CreateStyledButton>
+          {isOpen && <Modal setIsOpen={setIsOpen} />}
+        </CreateBlockSection>
       </BlockSection>
     </Container>
   );

@@ -9,3 +9,11 @@ export async function getBlocks(): Promise<Block[]> {
   console.log('response: ', resp);
   return resp.data;
 }
+
+export async function createBlock(block: Block): Promise<Block> {
+  console.log('block in api service: ', block);
+
+  const resp = await axios.post(blocksApiUrl, block);
+
+  return resp.data;
+}
